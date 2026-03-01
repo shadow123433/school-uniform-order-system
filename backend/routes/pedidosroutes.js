@@ -28,26 +28,29 @@ router.post("/", auth, (req, res) => {
       }
     }
 
-    const pedidoID = body.pedidoID || Date.now().toString();
-    const statusInicial =
+if (!body.nome || body.nome.trim() === "") {
+  return res.status(400).json({ error: "Nome é obrigatório" });
+}
+const pedidoID = body.pedidoID || Date.now().toString();    const statusInicial =
       body.tipo === "RESERVA" ? "aguardando" : "pendente";
 
     db.run(
       `INSERT INTO pedidos
-      (tipo,pedidoID,nome,endereco,numeroCasa,referencia,itens,total,data,status,user_id)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
+      (tipo,pedidoID,nome,endereco,numeroCasa,referencia,itens,total,data,status,user_id,ativo_usuario)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
-        body.tipo || "PEDIDO",
-        pedidoID,
-        body.nome,
-        body.endereco || "",
-        body.numeroCasa || "",
-        body.referencia || "",
-        JSON.stringify(itens),
-        totalCalculado,
-        new Date().toISOString(),
-        statusInicial,
-        req.user.id,
+      body.tipo || "PEDIDO",
+      pedidoID,
+      body.nome,
+      body.endereco || "",
+      body.numeroCasa || "",
+      body.referencia || "",
+      JSON.stringify(itens),
+      totalCalculado,
+      new Date().toISOString(),
+      statusInicial,
+      req.user.id,
+      1
       ],
       function (err) {
         if (err)
@@ -112,6 +115,11 @@ router.get("/", auth, onlyAdmin, (req, res) => {
 router.patch("/:id/status", auth, onlyAdmin, (req, res) => {
   const { status } = req.body;
 
+  const statusValidos = ["pendente", "pago", "aguardando", "retirado"];
+  if (!statusValidos.includes(status)) {
+    return res.status(400).json({ error: "Status inválido" });
+  }
+
   db.run(
     "UPDATE pedidos SET status=? WHERE id=?",
     [status, req.params.id],
@@ -150,7 +158,7 @@ router.patch("/ocultar/:id", auth, (req, res) => {
   db.run(
     `UPDATE pedidos 
      SET ativo_usuario=0 
-     WHERE pedidoID=? AND user_id=?`,
+     WHERE id=? AND user_id=?`,
     [req.params.id, req.user.id],
     function (err) {
       if (err)

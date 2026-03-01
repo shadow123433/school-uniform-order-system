@@ -89,7 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================
  reservarBtn.onclick = () => {
   // Verifica se o usuário está logado
-  if (!isLogged()) {
+  const token = localStorage.getItem("token");
+
+if (!token) {
 
     // Mostra alerta
     abrirModal("Faça login para prosseguir com a reserva.");
