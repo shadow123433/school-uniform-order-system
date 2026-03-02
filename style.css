@@ -1,8 +1,8 @@
 body {
   background: linear-gradient(135deg, #FFFFFF, #DCEEFF);
   margin: 0;
-  padding: 0 20px;
-  min-height: 100vh; /* garante que o gradiente ocupe a tela toda */
+  padding: 0; /* SEM padding lateral */
+  min-height: 100vh;
 }
 
 
@@ -446,29 +446,23 @@ body {
   padding: 0;
 }
 
-
-/* =========================
-   RODAPÉ PROFISSIONAL
-========================= */
-
+/*roda pe temporario*/
 .rodape {
   background-color: #0f2027;
   color: #e5e7eb;
-  padding: 60px 20px 30px;
+  padding: 50px 0 30px;
   font-family: 'Inter', 'Segoe UI', sans-serif;
   font-size: 14px;
 }
 
-/* Container */
 .rodape-conteudo {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  padding: 0 80px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 40px;
 }
 
-/* Colunas */
 .rodape-coluna h4 {
   font-size: 15px;
   font-weight: 600;
@@ -493,27 +487,24 @@ body {
   color: #93c5fd;
 }
 
-/* Linha divisória */
 .rodape-linha {
-  max-width: 1200px;
-  margin: 40px auto 20px;
+  width: 100%;
+  margin: 40px 0 20px;
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Copyright */
 .rodape-copy {
   text-align: center;
   font-size: 13px;
   color: #6b7280;
 }
 
-/* Responsivo */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .rodape-conteudo {
     grid-template-columns: 1fr;
+    padding: 0 24px;
     gap: 30px;
-    text-align: center;
   }
 }
 
@@ -545,5 +536,3 @@ body {
 .rodape-whatsapp a:hover {
   text-decoration: underline;
 }
-
-

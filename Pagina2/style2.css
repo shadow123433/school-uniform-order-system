@@ -744,19 +744,6 @@ html, body {
   position: absolute;
   inset: -2px;
   border-radius: inherit;
-
-  background: conic-gradient(
-  from 0deg,
-  transparent 20%,
-  #93c5fd,   /* azul claro bem visível */
-  #60a5fa,   /* azul claro forte */
-  #93c5fd,   /* volta suave */
-  transparent 80%
-);
-
-
-  animation: girar-borda 3s linear infinite;
-  z-index: -1;
 }
 /* MÁSCARA INTERNA (AZUL CLARO) */
 .escola-card button::after {
@@ -767,9 +754,8 @@ html, body {
 
   background: linear-gradient(
   135deg,
-  #4f8cff,  /* azul real, porém suave */
-  #3b82f6,  /* azul padrão profissional */
-  #2563eb   /* azul real levemente mais forte */
+  #0f2027,  /* azul real, porém suave */
+  #e0e0e0,  /* azul padrão profissional */
 );
 
 
@@ -787,7 +773,7 @@ html, body {
 .escola-card button:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 16px 34px rgba(37, 99, 235, 0.6);
+    0 16px 34px #0f2027(37, 99, 235, 0.6);
 }
 
 /* CLICK */
@@ -894,7 +880,7 @@ html, body {
   border-radius: 14px;
   border: none;
   font-weight: 600;
-  background: linear-gradient(135deg, #4f8cff, #3b6fe0);
+  background: linear-gradient(135deg, #0f2027);
   color: #ffffff;
   cursor: pointer;
 }
@@ -906,10 +892,10 @@ html, body {
     margin-top: 12px;
     padding: 14px;
     border-radius: 12px;
-    border: 2px solid #2563eb;
+    border: 2px solid #0f2027;
 
     background: transparent;
-    color: #2563eb;
+    color: #0f2027;
 
     font-size: 16px;
     font-weight: bold;
@@ -919,7 +905,7 @@ html, body {
 }
 
 .reservar:hover {
-    background-color: #2563eb;
+    background-color: #0f2027;
     color: #fff;
     transform: scale(1.02);
 }

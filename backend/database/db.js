@@ -82,8 +82,8 @@ db.serialize(() => {
   // ===============================
   // CRIAR ADMIN PADRÃO
   // ===============================
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminSenha = process.env.ADMIN_PASSWORD;
+  const adminEmail = env.ADMIN_EMAIL;
+  const adminSenha = env.ADMIN_PASSWORD;
 
   if (!adminEmail || !adminSenha) {
     console.log("⚠️ ADMIN_EMAIL ou ADMIN_PASSWORD não definidos no .env");
