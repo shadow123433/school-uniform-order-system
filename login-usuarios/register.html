@@ -9,34 +9,46 @@
 </head>
 <body>
 
+  <!-- MODAL -->
   <div id="modalOverlay" class="modal-overlay">
-  <div class="modal">
-    <h2>Aviso</h2>
-    <p id="modalMessage"></p>
-    <button onclick="fecharModal()">Fechar</button>
+    <div class="modal">
+      <h2>Aviso</h2>
+      <p id="modalMessage"></p>
+      <button onclick="fecharModal()">Fechar</button>
+    </div>
   </div>
-</div>
 
-  <!-- BOTÃO DE VOLTAR FORA DO LOGIN -->
-<button class="voltar-btn" onclick="history.back()">← Voltar</button>
+  <!-- BOTÃO VOLTAR -->
+  <button class="voltar-btn" onclick="history.back()">← Voltar</button>
 
-<main class="login-container">
-  <h1>Criar Conta</h1>
+  <!-- LOGIN -->
+  <main class="login-container">
+    <h1>Criar Conta</h1>
 
-  <form id="registerForm">
-    <input type="text" id="nome" placeholder="Nome completo" required />
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="senha" placeholder="Senha" required />
+    <form id="registerForm">
+      <input type="text" id="nome" placeholder="Nome completo" required />
+      <input type="email" id="email" placeholder="Email" required />
 
-    <button type="submit">Registrar</button>
-  </form>
+      <!-- SENHA COM OLHO -->
+      <div class="senha-container">
+        <input type="password" id="senha" placeholder="Senha" required />
+        <img 
+          src="https://cdn-icons-png.flaticon.com/512/709/709612.png"
+          class="toggle-senha"
+          id="toggleSenhaIcon"
+          alt="Mostrar senha"
+        />
+      </div>
 
-  <p>
-    Já tem conta?
-    <a href="login.html">Entrar</a>
-  </p>
-</main>
+      <button type="submit">Registrar</button>
+    </form>
 
-  <script src="auth.js"></script>
+    <p>
+      Já tem conta?
+      <a href="login.html">Entrar</a>
+    </p>
+  </main>
+
+<script src="auth.js"></script>
 </body>
 </html>

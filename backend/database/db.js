@@ -1,6 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 const bcrypt = require("bcrypt");
-require("dotenv").config();
+const env = require("../config/env");
 
 const db = new sqlite3.Database(
   __dirname + "/../pedidos.db",

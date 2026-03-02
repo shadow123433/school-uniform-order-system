@@ -206,3 +206,24 @@ function fecharModal() {
   document.getElementById("modalOverlay").style.display = "none";
   confirmCallback = null;
 }
+
+
+
+ // TOGGLE SENHA
+    const senhaInput = document.getElementById("senha");
+    const toggleIcon = document.getElementById("toggleSenhaIcon");
+
+    toggleIcon.addEventListener("click", function () {
+      if (senhaInput.type === "password") {
+        senhaInput.type = "text";
+        toggleIcon.src = "https://cdn-icons-png.flaticon.com/512/709/709586.png";
+      } else {
+        senhaInput.type = "password";
+        toggleIcon.src = "https://cdn-icons-png.flaticon.com/512/709/709612.png";
+      }
+    });
+
+    // FECHAR MODAL (caso use)
+    function fecharModal() {
+      document.getElementById("modalOverlay").style.display = "none";
+    }

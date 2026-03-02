@@ -1,4 +1,20 @@
 /* ===============================
+   VARIÁVEIS (PADRÃO LOJA)
+=============================== */
+:root {
+  --azul-principal: #2563eb;
+  --azul-escuro: #1e3a8a;
+  --azul-claro: #3b82f6;
+  --vermelho: #ef4444;
+  --verde: #22c55e;
+  --laranja: #f59e0b;
+  --bg-gradiente: linear-gradient(135deg, #ffffff, #dceeff);
+  --card-bg: #ffffff;
+  --texto-principal: #0f172a;
+  --texto-secundario: #64748b;
+}
+
+/* ===============================
    RESET
 =============================== */
 * {
@@ -9,8 +25,8 @@
 }
 
 body {
-  background: radial-gradient(circle at 20% 20%, #1e293b, #0f172a 70%);
-  color: #e2e8f0;
+  background: var(--bg-gradiente);
+  color: var(--texto-principal);
   min-height: 100vh;
 }
 
@@ -18,26 +34,25 @@ body {
    TOPO
 =============================== */
 .topo-pedidos {
-  background: linear-gradient(135deg, #7c3aed, #4f46e5);
-  padding: 26px 32px;
+  background: linear-gradient(135deg, #0f2027);
+  padding: 28px 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: white;
-  box-shadow: 0 15px 40px rgba(0,0,0,.45);
-  border-bottom: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 8px 20px rgba(0,0,0,.15);
 }
 
 .topo-pedidos h1 {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 800;
   letter-spacing: .5px;
 }
 
 /* BOTÃO VOLTAR */
 .btn-voltar {
-  background: rgba(255,255,255,.12);
-  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.3);
   color: white;
   padding: 10px 18px;
   border-radius: 14px;
@@ -48,7 +63,7 @@ body {
 }
 
 .btn-voltar:hover {
-  background: rgba(255,255,255,.22);
+  background: rgba(255,255,255,.25);
   transform: translateY(-2px);
 }
 
@@ -65,24 +80,21 @@ body {
    CARD PEDIDO
 =============================== */
 .pedido {
-  background: linear-gradient(145deg, #1e293b, #0f172a);
+  background: var(--card-bg);
   border-radius: 22px;
-  padding: 26px 30px;
-  margin-bottom: 22px;
-  box-shadow:
-    0 25px 60px rgba(0,0,0,.5),
-    inset 0 0 0 1px rgba(255,255,255,.05);
+  padding: 28px;
+  margin-bottom: 24px;
+  box-shadow: 0 15px 40px rgba(0,0,0,.08);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
   transition: .3s ease;
+  border: 1px solid rgba(0,0,0,.05);
 }
 
 .pedido:hover {
   transform: translateY(-6px);
-  box-shadow:
-    0 35px 70px rgba(0,0,0,.6),
-    inset 0 0 0 1px rgba(255,255,255,.08);
+  box-shadow: 0 25px 50px rgba(0,0,0,.12);
 }
 
 /* HEADER */
@@ -95,7 +107,6 @@ body {
 .pedido-id {
   font-size: 16px;
   font-weight: 700;
-  color: #f1f5f9;
 }
 
 /* STATUS */
@@ -108,30 +119,30 @@ body {
 }
 
 .status.recebido {
-  background: rgba(34,197,94,.15);
-  color: #22c55e;
+  background: rgba(34,197,94,.12);
+  color: var(--verde);
 }
 
 .status.processando {
-  background: rgba(245,158,11,.15);
-  color: #f59e0b;
+  background: rgba(245,158,11,.12);
+  color: var(--laranja);
 }
 
 .status.pronto {
-  background: rgba(59,130,246,.15);
-  color: #3b82f6;
+  background: rgba(59,130,246,.12);
+  color: var(--azul-claro);
 }
 
 .status.cancelado {
-  background: rgba(239,68,68,.15);
-  color: #ef4444;
+  background: rgba(239,68,68,.12);
+  color: var(--vermelho);
 }
 
 /* ===============================
    ITENS
 =============================== */
 .itens {
-  border-top: 1px solid rgba(255,255,255,.08);
+  border-top: 1px solid rgba(0,0,0,.08);
   padding-top: 16px;
   display: grid;
   gap: 10px;
@@ -141,7 +152,7 @@ body {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
-  color: #cbd5e1;
+  color: var(--texto-secundario);
 }
 
 /* ===============================
@@ -153,30 +164,31 @@ body {
   font-weight: 800;
   font-size: 16px;
   padding-top: 12px;
-  border-top: 1px dashed rgba(255,255,255,.15);
-  color: #f8fafc;
+  border-top: 1px dashed rgba(0,0,0,.1);
 }
 
 /* ===============================
-   BOTÃO EXCLUIR
+   BOTÕES
 =============================== */
-.btn-excluir {
+.btn-excluir,
+.btn-ocultar {
   align-self: flex-end;
-  padding: 8px 14px;
+  padding: 8px 16px;
   font-size: 13px;
   font-weight: 600;
   color: white;
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  background: linear-gradient(135deg, var(--vermelho), #dc2626);
   border: none;
   border-radius: 10px;
   cursor: pointer;
   transition: .25s;
-  box-shadow: 0 8px 20px rgba(239,68,68,.35);
+  box-shadow: 0 6px 16px rgba(239,68,68,.3);
 }
 
-.btn-excluir:hover {
+.btn-excluir:hover,
+.btn-ocultar:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(239,68,68,.45);
+  box-shadow: 0 10px 22px rgba(239,68,68,.4);
 }
 
 /* ===============================
@@ -184,18 +196,88 @@ body {
 =============================== */
 .vazio {
   text-align: center;
-  margin-top: 100px;
-  opacity: .7;
+  margin-top: 120px;
+  opacity: .8;
 }
 
 .vazio h2 {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 800;
 }
 
 .vazio p {
   margin-top: 12px;
-  color: #94a3b8;
+  color: var(--texto-secundario);
+}
+
+/* ===============================
+   MODAL
+=============================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(6px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.25s ease;
+}
+
+.modal {
+  background: #ffffff;
+  width: 90%;
+  max-width: 420px;
+  padding: 30px 24px;
+  border-radius: 18px;
+  box-shadow: 0 20px 45px rgba(0,0,0,.2);
+  text-align: center;
+  animation: slideUp 0.25s ease;
+}
+
+#modalMessage {
+  font-size: 16px;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.modal-buttons button {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+/* Confirmar */
+.modal-buttons button:first-child {
+  background: var(--vermelho);
+  color: white;
+}
+
+.modal-buttons button:first-child:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+/* Cancelar */
+.modal-buttons button:last-child {
+  background: #f1f5f9;
+  color: #333;
+}
+
+.modal-buttons button:last-child:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
 }
 
 /* ===============================
@@ -211,98 +293,17 @@ body {
     align-items: flex-start;
     gap: 10px;
   }
+
+  .topo-pedidos {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
 }
 
-
-
-
-/* ============================
-   OVERLAY
-============================ */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  animation: fadeIn 0.25s ease;
-}
-
-/* ============================
-   CAIXA DO MODAL
-============================ */
-.modal {
-  background: #ffffff;
-  width: 90%;
-  max-width: 420px;
-  padding: 28px 24px;
-  border-radius: 16px;
-  box-shadow:
-    0 10px 25px rgba(0, 0, 0, 0.15),
-    0 5px 10px rgba(0, 0, 0, 0.05);
-  text-align: center;
-  animation: slideUp 0.25s ease;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* ============================
-   TEXTO
-============================ */
-#modalMessage {
-  font-size: 16px;
-  color: #333;
-  margin-bottom: 24px;
-  line-height: 1.5;
-}
-
-/* ============================
-   BOTÕES
-============================ */
-.modal-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 14px;
-}
-
-.modal-buttons button {
-  padding: 10px 18px;
-  border-radius: 8px;
-  border: none;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-/* Botão Confirmar */
-.modal-buttons button:first-child {
-  background: #e53935;
-  color: #fff;
-}
-
-.modal-buttons button:first-child:hover {
-  background: #c62828;
-  transform: translateY(-2px);
-}
-
-/* Botão Cancelar */
-.modal-buttons button:last-child {
-  background: #f0f0f0;
-  color: #333;
-}
-
-.modal-buttons button:last-child:hover {
-  background: #e0e0e0;
-  transform: translateY(-2px);
-}
-
-/* ============================
+/* ===============================
    ANIMAÇÕES
-============================ */
+=============================== */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }

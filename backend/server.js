@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -8,11 +6,14 @@ const { PORT } = require("./config/env");
 const authRoutes = require("./routes/authroutes");
 const pedidosRoutes = require("./routes/pedidosroutes");
 
-require("./database/db"); // inicializa banco
+require("./database/db"); // Inicializa o banco ao subir o servidor
 
 const app = express();
 
-// Middlewares globais
+
+// ===============================
+// CORS
+// ===============================
 const corsOptions = {
   origin: [
     "http://localhost:5500",
@@ -23,19 +24,40 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+
+// ===============================
+// Middlewares Globais
+// ===============================
 app.use(express.json());
+
+// Servir arquivos do front (coloque seu front na pasta /public)
 app.use(express.static(path.join(__dirname, "..")));
 
-// Rotas
+
+// ===============================
+// Rotas da API
+// ===============================
 app.use("/auth", authRoutes);
 app.use("/pedidos", pedidosRoutes);
 
-// Health check (recomendado)
-app.get("/", (req, res) => {
-  res.json({ status: "API rodando" });
+
+
+
+// ===============================
+// Middleware de erro global
+// ===============================
+app.use((err, req, res, next) => {
+  console.error("ERRO GLOBAL:", err);
+  res.status(500).json({
+    error: "Erro interno do servidor"
+  });
 });
 
-// Start
+
+// ===============================
+// Inicialização do servidor
+// ===============================
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

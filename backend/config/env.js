@@ -1,6 +1,10 @@
-require("dotenv").config();
+const path = require("path");
 
-const required = ["JWT_SECRET", "ADMIN_EMAIL", "ADMIN_PASSWORD"];
+require("dotenv").config({
+  path: path.resolve(__dirname, "../../.env")
+});
+
+const required = ["JWT_SECRET", "ADMIN_EMAIL", "ADMIN_PASSWORD", "PORT"];
 
 required.forEach((key) => {
   if (!process.env[key]) {

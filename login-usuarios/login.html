@@ -9,27 +9,34 @@
 </head>
 <body>
 
- <!-- BOTÃO DE VOLTAR FORA DO LOGIN -->
-<button class="voltar-btn" onclick="history.back()">← Voltar</button>
+  <!-- BOTÃO VOLTAR -->
+  <button class="voltar-btn" onclick="history.back()">← Voltar</button>
 
-<main class="login-container">
-  <h1>Entrar</h1>
+  <main class="login-container">
+    <h1>Entrar</h1>
 
-  <form id="loginForm">
-    <input type="email" id="email" placeholder="Email" required />
-<div class="senha-container">
-  <input type="password" id="senha" placeholder="Senha" required />
-  <span class="toggle-senha" onclick="toggleSenha()">👁️</span>
-</div>
-    <button type="submit">Entrar</button>
-  </form>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required />
 
-  <p>
-    Não tem conta?
-    <a href="register.html">Criar agora</a>
-  </p>
-</main>
+      <!-- SENHA PADRÃO IGUAL REGISTER -->
+      <div class="senha-container">
+        <input type="password" id="senha" placeholder="Senha" required />
+        <img 
+          src="https://cdn-icons-png.flaticon.com/512/709/709612.png"
+          class="toggle-senha"
+          id="toggleSenhaIcon"
+          alt="Mostrar senha"
+        />
+      </div>
 
+      <button type="submit">Entrar</button>
+    </form>
+
+    <p>
+      Não tem conta?
+      <a href="register.html">Criar agora</a>
+    </p>
+  </main>
 
   <script src="auth.js"></script>
 </body>

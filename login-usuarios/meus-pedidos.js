@@ -106,7 +106,7 @@ function carregarPedidos(token) {
   abrirModal("Excluir este pedido da sua conta?", () => {
 
     fetch(
-      `http://localhost:3000/pedidos/ocultar/${pedido.pedidoID}`,
+      `http://localhost:3000/pedidos/ocultar/${pedido.id}`,
       {
         method: "PATCH",
         headers: {
@@ -118,6 +118,7 @@ function carregarPedidos(token) {
       .then(data => {
         if (data.success) {
           div.remove();
+          abrirModal("Pedido excluido com sucesso!");
         } else {
           alert(data.error || "Erro ao ocultar pedido");
         }

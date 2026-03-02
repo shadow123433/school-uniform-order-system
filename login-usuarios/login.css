@@ -1,235 +1,280 @@
 /* ===============================
+   VARIÁVEIS (PADRÃO LOJA)
+=============================== */
+:root {
+  --azul-principal: #2563eb;
+  --azul-escuro: #1e3a8a;
+  --azul-claro: #3b82f6;
+  --bg-gradiente: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
+  --card-bg: rgba(255,255,255,0.97);
+  --texto-principal: #0f172a;
+  --texto-secundario: #64748b;
+  --erro: #ef4444;
+}
+
+/* ===============================
    RESET & BASE
 =============================== */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    color: #fff;
-    font-size: 16px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-gradiente);
+  color: #fff;
+  font-size: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* efeito leve no fundo */
+body::before {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255,255,255,.08), transparent 70%);
+  top: -200px;
+  right: -200px;
 }
 
 /* ===============================
    LOGIN CARD
 =============================== */
 .login-container {
-    background: rgba(255,255,255,0.95);
-    padding: 50px 40px;
-    border-radius: 20px;
-    width: 100%;
-    max-width: 420px;
-    text-align: center;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    transition: all 0.4s ease;
+  background: var(--card-bg);
+  padding: 50px 40px;
+  border-radius: 22px;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+  transition: all 0.4s ease;
+  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 2;
 }
 
 .login-container:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+  transform: translateY(-8px);
+  box-shadow: 0 40px 90px rgba(0,0,0,0.45);
 }
 
 .login-container h1 {
-    font-size: 32px;
-    color: #0f2027;
-    margin-bottom: 35px;
-    letter-spacing: 1px;
-    font-weight: 700;
+  font-size: 30px;
+  color: var(--texto-principal);
+  margin-bottom: 35px;
+  font-weight: 800;
 }
 
 /* ===============================
    FORM
 =============================== */
 .login-container form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .login-container input {
-    padding: 15px 18px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 12px;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    background: #f7f7f7;
-    color: #333;
+  padding: 15px 18px;
+  margin-bottom: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+  color: var(--texto-principal);
 }
 
 .login-container input:focus {
-    border-color: #2c5364;
-    box-shadow: 0 0 10px rgba(44, 83, 100, 0.5);
-    outline: none;
+  border-color: var(--azul-principal);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  outline: none;
+  background: #ffffff;
 }
 
 /* ===============================
-   BOTÃO
+   BOTÃO LOGIN
 =============================== */
 .login-container button {
-    padding: 16px 0;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(90deg, #0f2027, #2c5364);
-    color: #fff;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+  padding: 16px 0;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--azul-principal), var(--azul-escuro));
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 12px 25px rgba(37,99,235,.35);
 }
 
 .login-container button:hover {
-    background: linear-gradient(90deg, #203a43, #0f2027);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 20px rgba(0,0,0,0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 35px rgba(37,99,235,.45);
+}
+
+.login-container button:active {
+  transform: scale(0.97);
 }
 
 /* ===============================
    LINKS
 =============================== */
 .login-container p {
-    margin-top: 25px;
-    font-size: 14px;
-    color: #555;
+  margin-top: 25px;
+  font-size: 14px;
+  color: var(--texto-secundario);
 }
 
 .login-container p a {
-    color: #2c5364;
-    font-weight: 600;
-    text-decoration: none;
-    transition: color 0.3s ease;
+  color: var(--azul-principal);
+  font-weight: 600;
+  text-decoration: none;
+  transition: .3s;
 }
 
 .login-container p a:hover {
-    color: #0f2027;
+  color: var(--azul-escuro);
 }
 
 /* ===============================
-   ERROS / ALERTAS
+   ERROS
 =============================== */
 .erro {
-    color: #e53935;
-    font-size: 14px;
-    margin-top: 10px;
-    font-weight: 600;
-    text-align: left;
+  color: var(--erro);
+  font-size: 14px;
+  margin-top: 10px;
+  font-weight: 600;
+  text-align: left;
 }
 
 /* ===============================
-   RESPONSIVO
+   BOTÃO VOLTAR
 =============================== */
-@media (max-width: 500px) {
-    .login-container {
-        padding: 35px 25px;
-    }
-
-    .login-container h1 {
-        font-size: 28px;
-    }
-
-    .login-container button {
-        font-size: 16px;
-    }
-}
-
-
 .voltar-btn {
-    position: fixed;  /* fixo na tela, não no container */
-    top: 20px;
-    left: 20px;
-    padding: 10px 16px;
-    border: none;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.9);
-    color: #333;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-    z-index: 1000; /* garante que fique acima de tudo */
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.9);
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+  transition: all 0.3s ease;
+  z-index: 1000;
 }
 
 .voltar-btn:hover {
-    background: rgba(255,255,255,1);
-    transform: translateY(-2px);
+  transform: translateY(-2px);
 }
 
-
+/* ===============================
+   SENHA (OLHINHO)
+=============================== */
 .senha-container {
   position: relative;
 }
 
 .toggle-senha {
   position: absolute;
-  right: 10px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  width: 24px;
+  width: 22px;
+  opacity: .6;
+  transition: .2s;
 }
 
-
-
-
-
-#senha {
-    width: 100%;
+.toggle-senha:hover {
+  opacity: 1;
 }
 
-
+/* ===============================
+   MODAL
+=============================== */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(15, 23, 42, 0.75);
   display: none;
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  backdrop-filter: blur(5px);
 }
 
 .modal {
   background: #ffffff;
   color: #000;
   padding: 30px;
-  border-radius: 12px;
+  border-radius: 16px;
   width: 320px;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  animation: aparecer 0.3s ease;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+  animation: aparecer 0.25s ease;
 }
 
 .modal h2 {
   margin-bottom: 15px;
+  font-size: 20px;
 }
 
 .modal button {
   margin-top: 20px;
   padding: 10px 20px;
   border: none;
-  border-radius: 8px;
-  background: #38BDF8;
+  border-radius: 10px;
+  background: var(--azul-principal);
   color: #fff;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
+  transition: .2s;
 }
 
 .modal button:hover {
-  background: #0EA5E9;
+  background: var(--azul-escuro);
+  transform: translateY(-2px);
 }
 
+/* ===============================
+   RESPONSIVO
+=============================== */
+@media (max-width: 500px) {
+  .login-container {
+    padding: 35px 25px;
+  }
+
+  .login-container h1 {
+    font-size: 24px;
+  }
+
+  .login-container button {
+    font-size: 16px;
+  }
+}
+
+/* ===============================
+   ANIMAÇÃO
+=============================== */
 @keyframes aparecer {
   from { transform: scale(0.9); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
+}
+
+.senha-container input {
+  width: 100%;
+  padding-right: 45px; /* espaço para o olhinho */
 }
