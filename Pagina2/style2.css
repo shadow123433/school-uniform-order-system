@@ -977,13 +977,15 @@ body {
   padding: 0;
 }
 
+/* MENU TOPO */
 .menu-topo {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background-color: #0f2027;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   width: 100%;
+
+  background-color: #0f2027; /* cor original */
+  box-shadow: 0 4px 12px rgba(0,0,0,.25);
 }
 
 .menu-topo ul {
@@ -995,23 +997,32 @@ body {
 }
 
 .menu-topo ul li {
-  flex: 1;              /* cada item ocupa espaço igual */
+  flex: 1;
   text-align: center;
 }
 
 .menu-topo ul li a {
   display: block;
-  width: 100%;          /* ocupa toda a largura do li */
-  padding: 16px 0;      /* botão mais alto */
+  width: 100%;
+  padding: 16px 0;
+
   color: #ffffff;
   text-decoration: none;
   font-size: 14px;
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+
+  transition: .25s ease;
 }
 
-/* Hover grande ocupando tudo */
+/* Hover ocupando toda a área */
 .menu-topo ul li a:hover {
-  background-color: #1a1a1a;
+  background-color: rgba(255,255,255,.12);
+  transform: translateY(-2px);
+}
+
+/* Efeito de clique */
+.menu-topo ul li a:active {
+  transform: scale(0.98);
 }
 
 

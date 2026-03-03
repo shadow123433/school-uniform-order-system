@@ -6,37 +6,6 @@ body {
 }
 
 
-/* MENU DE NAVEGAÇÃO */
-.menu {
-  background-color: #9ca3af;
-  padding: 15px;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-.menu ul {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  margin: 0;
-  padding: 0;
-}
-
-.menu a {
-  color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.menu a:hover {
-  text-decoration: underline;
-}
-
-
-
 p {
     color: #0f2027; /* cor do texto */
 }
@@ -392,11 +361,6 @@ html, body {
 
 
 
-
-
-
-
-
 /* =========================
    NAVEGAÇÃO (MOBILE FIRST)
 ========================= */
@@ -405,39 +369,52 @@ html, body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background-color: #0f2027;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  width: 100%;       /* garante largura total */
+  width: 100%;
+
+  background-color: #0f2027; /* cor principal */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
+/* Lista principal */
 .menu ul {
   list-style: none;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between; /* distribui igualmente */
   align-items: center;
-  padding: 0;         /* remove padding */
-  margin: 0;          /* remove margin */
-  width: 100%;        /* garante largura total */
+  padding: 0;
+  margin: 0;
+  width: 100%;
 }
 
+/* Cada item ocupa o mesmo espaço */
 .menu ul li {
   flex: 1;
   text-align: center;
 }
 
+/* Links */
 .menu ul li a {
   display: block;
-  padding: 12px 6px;
+  width: 100%;
+  padding: 14px 0;
+
   color: #ffffff;
   text-decoration: none;
   font-size: 14px;
-  white-space: nowrap;
+  font-weight: 600;
+
+  transition: 0.25s ease;
 }
 
-/* Efeito hover */
+/* Hover ocupando toda a área */
 .menu ul li a:hover {
-  background-color: #1a1a1a;
-  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Clique */
+.menu ul li a:active {
+  transform: scale(0.98);
 }
 
 /* =========================
