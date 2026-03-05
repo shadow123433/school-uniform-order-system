@@ -201,20 +201,26 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 2. Toggle Senha (Olhinho)
-    const toggleIcon = document.getElementById("toggleSenhaIcon");
-    if (toggleIcon) {
-        toggleIcon.addEventListener("click", function () {
-            const senhaInput = document.getElementById("senha");
-            if (senhaInput.type === "password") {
-                senhaInput.type = "text";
-                this.src = "https://cdn-icons-png.flaticon.com/512/709/709586.png";
-            } else {
-                senhaInput.type = "password";
-                this.src = "https://cdn-icons-png.flaticon.com/512/709/709612.png";
-            }
-        });
-    }
+  const toggleIcon = document.getElementById("toggleSenhaIcon");
+const senhaInput = document.getElementById("senha");
+
+// Ícones Estáveis (Icons8 - Material Design)
+const OLHO_ABERTO = "https://img.icons8.com/material-outlined/24/000000/visible.png";
+const OLHO_COM_TRACO = "https://img.icons8.com/material-outlined/24/000000/invisible.png";
+
+if (toggleIcon && senhaInput) {
+    toggleIcon.addEventListener("click", function () {
+        if (senhaInput.type === "password") {
+            // Ação: Mostrar Senha
+            senhaInput.type = "text";
+            this.src = OLHO_ABERTO; // Fica o olho aberto
+        } else {
+            // Ação: Esconder Senha
+            senhaInput.type = "password";
+            this.src = OLHO_COM_TRACO; // Fica o olho com o traço
+        }
+    });
+}
 
     // 3. Remover erro ao digitar
     document.querySelectorAll('input').forEach(input => {

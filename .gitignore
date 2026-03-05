@@ -25,5 +25,6 @@ Thumbs.db
 # backend, arquivos de configuração sensíveis
 .env/
 
-pedidos.db-shm/
-pedidos.db-wal/
+# SQLite temporary files
+*.db-shm
+*.db-wal
