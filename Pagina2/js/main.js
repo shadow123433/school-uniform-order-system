@@ -338,27 +338,32 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // --- REDIRECIONAMENTOS E RESTAURAÇÃO DE PEDIDOS ---
+ // --- REDIRECIONAMENTOS E RESTAURAÇÃO DE PEDIDOS ---
 
-  // Checar se veio do login para finalizar pedido
-  const redirect = sessionStorage.getItem("redirectAfterLogin");
-  if (redirect === window.location.pathname) {
-    sessionStorage.removeItem("redirectAfterLogin");
-    if (Auth.isLogged() && window.carrinho.length) {
-      modal.style.display = "flex"; // Abre o modal de endereço de entrega
-    }
+  // 1. Lógica do Bilhete (Abre o modal automaticamente após Login/Registro)
+  const checkoutAviso = localStorage.getItem("abrirModalCheckout");
+  
+  if (checkoutAviso === "true") {
+      // Limpa o bilhete para não abrir de novo no F5
+      localStorage.removeItem("abrirModalCheckout");
+
+      // Verifica se está logado e se o carrinho tem algo
+      if (Auth.isLogged() && window.carrinho && window.carrinho.length > 0) {
+          // 'modal' é a variável que você criou lá em cima no main.js
+          modal.style.display = "flex"; 
+      }
   }
 
-  // Restaurar modal de Pedido Confirmado (Venda Direta)
+  // 2. Restaurar modal de Pedido Confirmado (Venda Direta)
   const pedidoSalvo = sessionStorage.getItem("pedidoConfirmado");
   if (pedidoSalvo && Auth.isLogged()) {
-    const { pedidoID } = JSON.parse(pedidoSalvo);
-    pedidoForm.style.display = "none";
+    const dadosPedido = JSON.parse(pedidoSalvo);
+    if (pedidoForm) pedidoForm.style.display = "none";
     
     const pedidoModalConfirmacao = document.getElementById("pedido-modal-confirmacao");
     const pedidoIdModal = document.getElementById("pedidoIdModal");
     if (pedidoModalConfirmacao && pedidoIdModal) {
-        pedidoIdModal.textContent = pedidoID;
+        pedidoIdModal.textContent = dadosPedido.pedidoID;
         pedidoModalConfirmacao.style.display = "flex";
     }
   }

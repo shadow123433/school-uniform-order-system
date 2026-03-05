@@ -38,7 +38,7 @@ export async function apiFetch(url, options = {}) {
 
     const res = await fetch(API_URL + url, options);
 
-    if (res.status === 401) {
+    if (res.status === 401) {    //credenciais inválidas ou token expirado
         Auth.logout();
         // Se não estiver autorizado, redireciona para o login
         window.location.href = "/login-usuarios/login.html";

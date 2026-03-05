@@ -89,9 +89,11 @@ function carregarPedidos(token) {
           <strong>Status:</strong> 
           <span class="status-${status}">${status}</span><br>
           <strong>Data:</strong> ${data}<br>
+          ${pedido.tipo !== "RESERVA" ? `
           <strong>Endereço:</strong> ${pedido.endereco || "—"}<br>
           <strong>Número da casa:</strong> ${pedido.numeroCasa || "—"}<br>
           <strong>Referência:</strong> ${pedido.referencia || "—"}
+          ` : ""}
 
           <div class="itens">
             <strong>Itens:</strong>

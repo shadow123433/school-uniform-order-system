@@ -179,6 +179,11 @@ header{
 <script>
 const API = "http://localhost:3000";
 
+// Elementos do DOM (Cache para performance)
+const loginBox = document.getElementById("loginBox");
+const painel = document.getElementById("painel");
+const listaPedidos = document.getElementById("listaPedidos");
+
 function getToken(){
   return localStorage.getItem("token");
 }
@@ -197,176 +202,151 @@ async function login() {
   const emailInput = document.getElementById("email");
   const senhaInput = document.getElementById("senha");
 
-  const email = emailInput.value;
-  const senha = senhaInput.value;
+  try {
+    const res = await fetch(API + "/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: emailInput.value, senha: senhaInput.value })
+    });
 
-  const res = await fetch(API + "/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, senha })
-  });
+    const data = await res.json();
 
-  const data = await res.json();
+    if (!res.ok || !data.token) {
+      alert(data.error || "Login inválido");
+      return;
+    }
 
-  if (!data.token) {
-    alert("Login inválido");
-    return;
+    setToken(data.token);
+    iniciarPainel();
+  } catch (err) {
+    alert("Erro ao conectar com o servidor.");
   }
-
-  setToken(data.token);
-  iniciarPainel();
 }
 
 /* INICIAR */
+let intervaloPedidos = null;
 function iniciarPainel(){
   loginBox.style.display="none";
   painel.style.display="block";
 
   carregarPedidos();
-  setInterval(carregarPedidos,5000);
+  
+  // Limpa intervalo anterior se existir para não duplicar
+  if(intervaloPedidos) clearInterval(intervaloPedidos);
+  intervaloPedidos = setInterval(carregarPedidos, 5000);
 }
 
-/* BUSCAR */
+/* BUSCAR PEDIDOS */
 async function carregarPedidos(){
   const token = getToken();
+  if(!token) return;
 
-  const res = await fetch(API + "/pedidos",{
-    headers:{ "Authorization":"Bearer " + token }
-  });
-
-  const response = await res.json();
-  const pedidos = response.data || [];
-
-  const lista = document.getElementById("listaPedidos");
-  lista.innerHTML="";
-
-  pedidos.forEach(p => {
-
-    let itensHtml = "";
-    p.itens.forEach(item=>{
-      for(const [tam,qtd] of Object.entries(item.tamanhos)){
-        itensHtml += `<div>• ${item.produto} (${tam} x ${qtd})</div>`;
-      }
+  try {
+    const res = await fetch(API + "/pedidos",{
+      headers:{ "Authorization":"Bearer " + token }
     });
 
-    const acaoTexto =
-      p.tipo === "RESERVA"
-      ? "Marcar como retirado"
-      : "Marcar como pago";
+    // Se o token estiver expirado ou inválido (ERRO 401 ou 403)
+    if (res.status === 401 || res.status === 403) {
+      console.warn("Sessão expirada. Redirecionando...");
+      logout();
+      return;
+    }
 
-    const novoStatus =
-      p.tipo === "RESERVA"
-      ? "retirado"
-      : "pago";
+    const response = await res.json();
+    
+    // Suporte para resposta direta em array ou dentro de .data
+    const pedidos = Array.isArray(response) ? response : (response.data || []);
 
-    const card = document.createElement("div");
-    card.className="card";
+    // SÓ LIMPA A TELA SE TIVER DADOS OU FOR ARRAY VAZIO (Sucesso no Fetch)
+    listaPedidos.innerHTML = "";
 
-    card.innerHTML = `
-  <div class="grid">
-    <div>
-      <div class="label">ID do Pedido</div>
-      <div class="value">${p.pedidoID}</div>
-    </div>
+    if (pedidos.length === 0) {
+      listaPedidos.innerHTML = "<p style='text-align:center; padding:20px; color:#666;'>Nenhum pedido encontrado no momento.</p>";
+      return;
+    }
 
-    <div>
-      <div class="label">Tipo</div>
-      <div class="value">${p.tipo}</div>
-    </div>
-
-    <div>
-      <div class="label">Status</div>
-      <div class="status ${p.status}">${p.status}</div>
-    </div>
-
-    <div>
-      <div class="label">Nome</div>
-      <div class="value">${p.nome}</div>
-    </div>
-
-    <div>
-    <div class="label">Total</div>
-    <div class="value">R$ ${Number(p.total).toFixed(2)}</div>
-    </div>
-
-    <div>
-    <div class="label">Data</div>
-    <div class="value">
-    ${p.data ? new Date(p.data).toLocaleString("pt-BR") : "-"}
-    </div>
-    </div>
-
-    <div>
-  <div class="label">Endereço</div>
-  <div class="value">${p.endereco || "-"}</div>
-</div>
-
-<div>
-  <div class="label">Número da casa</div>
-  <div class="value">${p.numeroCasa || "-"}</div>
-</div>
-
-    <div>
-      <div class="label">Referência</div>
-      <div class="value">${p.referencia || "-"}</div>
-    </div>
-  </div>
-
-      <div class="itens">${itensHtml}</div>
-
-      <div class="acoes">
-      ${
-      p.status === "cancelado_cliente"
-      ? `<span style="color:#dc3545;font-weight:bold;">
-          Pedido cancelado pelo cliente
-        </span>`
-      : `
-        ${(p.status === "pendente" || p.status === "aguardando")
-          ? `<button class="btn btn-success" onclick="alterarStatus(${p.id}, '${novoStatus}')">
-              ${acaoTexto}
-            </button>`
-          : ""}
-
-        <button class="btn btn-delete" onclick="deletarPedido(${p.id})">
-          Excluir
-        </button>
-        `
-        }
-        </div>
-        `;
-
-        lista.appendChild(card);
+    pedidos.forEach(p => {
+      let itensHtml = "";
+      if (p.itens) {
+        p.itens.forEach(item => {
+          if (item.tamanhos) {
+            for (const [tam, qtd] of Object.entries(item.tamanhos)) {
+              itensHtml += `<div>• ${item.produto} (${tam} x ${qtd})</div>`;
+            }
+          }
         });
-        }
+      }
 
-/* STATUS */
-async function alterarStatus(id, status){
-  const token = getToken();
+      const acaoTexto = p.tipo === "RESERVA" ? "Marcar como retirado" : "Marcar como pago";
+      const novoStatus = p.tipo === "RESERVA" ? "retirado" : "pago";
 
-  await fetch(API + "/pedidos/" + id + "/status",{
-    method:"PATCH",
-    headers:{
-      "Content-Type":"application/json",
-      "Authorization":"Bearer " + token
-    },
-    body: JSON.stringify({ status })
-  });
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="grid">
+          <div><div class="label">ID do Pedido</div><div class="value">${p.pedidoID || p.id}</div></div>
+          <div><div class="label">Tipo</div><div class="value">${p.tipo}</div></div>
+          <div><div class="label">Status</div><div class="status ${p.status}">${p.status}</div></div>
+          <div><div class="label">Nome</div><div class="value">${p.nome}</div></div>
+          <div><div class="label">Total</div><div class="value">R$ ${Number(p.total).toFixed(2)}</div></div>
+          <div><div class="label">Data</div><div class="value">${p.data ? new Date(p.data).toLocaleString("pt-BR") : "-"}</div></div>
+          ${p.tipo !== "RESERVA" ? `
+          <div><div class="label">Endereço</div><div class="value">${p.endereco || "-"}</div></div>
+          <div><div class="label">Número</div><div class="value">${p.numeroCasa || "-"}</div></div>
+          <div><div class="label">Referência</div><div class="value">${p.referencia || "-"}</div></div>
+          ` : ""}
+        </div>
+        <div class="itens">${itensHtml}</div>
+        <div class="acoes">
+          ${p.status === "cancelado_cliente" 
+            ? `<span style="color:#dc3545;font-weight:bold;">Cancelado pelo cliente</span>`
+            : `
+              ${(p.status === "pendente" || p.status === "aguardando")
+                ? `<button class="btn btn-success" onclick="alterarStatus(${p.id}, '${novoStatus}')">${acaoTexto}</button>`
+                : ""
+              }
+              <button class="btn btn-delete" onclick="deletarPedido(${p.id})">Excluir</button>
+            `
+          }
+        </div>
+      `;
+      listaPedidos.appendChild(card);
+    });
 
-  carregarPedidos();
+  } catch (err) {
+    console.error("Erro ao conectar com API de pedidos:", err);
+    // Não limpa a lista. Mantém o que estava na tela para não ficar branco.
+  }
 }
 
-/* DELETE */
-async function deletarPedido(id){
-  if(!confirm("Excluir pedido?")) return;
-
+/* ALTERAR STATUS */
+async function alterarStatus(id, status){
   const token = getToken();
+  try {
+    await fetch(`${API}/pedidos/${id}/status`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({ status })
+    });
+    carregarPedidos();
+  } catch (err) { alert("Erro ao atualizar status."); }
+}
 
-  await fetch(API + "/pedidos/" + id,{
-    method:"DELETE",
-    headers:{ "Authorization":"Bearer " + token }
-  });
-
-  carregarPedidos();
+/* DELETAR */
+async function deletarPedido(id){
+  if(!confirm("Excluir pedido permanentemente?")) return;
+  const token = getToken();
+  try {
+    await fetch(`${API}/pedidos/${id}`, {
+      method: "DELETE",
+      headers: { "Authorization": "Bearer " + token }
+    });
+    carregarPedidos();
+  } catch (err) { alert("Erro ao deletar."); }
 }
 
 /* AUTO LOGIN */
