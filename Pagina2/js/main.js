@@ -170,7 +170,7 @@ document.body.appendChild(modal);
    EVENTOS E FINALIZAÇÃO
 ========================= */
 finalizarBtn.onclick = () => {
-    // Usando a função mestre do reserva.js que você já criou
+    // Usamos a função mestre do reserva.js que você já criou
     if (validarAcesso()) {
         modal.style.display = "flex";
     }
