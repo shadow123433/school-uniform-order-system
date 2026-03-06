@@ -126,15 +126,16 @@ if (btnCancelar) {
           }
         }
       )
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            abrirModal("Pedido cancelado com sucesso!");
-            carregarPedidos(token);
-          } else {
-            alert(data.error || "Erro ao cancelar pedido");
-          }
-        })
+       .then(data => {
+     if (data.success) {
+     // Abre como aviso (sem callback)
+     abrirModal("Pedido cancelado com sucesso!");
+     carregarPedidos(token);
+     } else {
+      // Joga o erro do back-end (Pedido não pode ser cancelado) no modal
+      abrirModal(data.error || "O cancelamento só é permitido para pedidos com status 'Pendente' ou 'Aguardando'.");
+     }
+     })
         .catch(err => {
           console.error(err);
           alert("Erro ao conectar com o servidor");
@@ -205,13 +206,23 @@ let acaoAoConfirmar = null;
 function abrirModal(mensagem, callback = null) {
     const modal = document.getElementById("modalOverlay");
     const texto = document.getElementById("modalMessage");
-    
+    const btnConfirmar = modal.querySelector("button[onclick='confirmarModal()']");
+    const btnFechar = modal.querySelector("button[onclick='fecharModal()']");
+
     if (modal && texto) {
         texto.innerText = mensagem;
         modal.style.display = "flex";
-        
-        // Se passarmos uma função (callback), guardamos ela para usar no confirmarModal
         acaoAoConfirmar = callback;
+
+        if (callback) {
+            // Se tem ação (pergunta), mostra o botão confirmar
+            btnConfirmar.style.display = "inline-block";
+            btnFechar.innerText = "Cancelar";
+        } else {
+            // Se não tem ação (aviso de erro), esconde o confirmar
+            btnConfirmar.style.display = "none";
+            btnFechar.innerText = "Fechar";
+        }
     }
 }
 
