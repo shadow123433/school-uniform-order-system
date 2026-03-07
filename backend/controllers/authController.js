@@ -8,10 +8,10 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // REGISTER
 // ===============================
 exports.register = async (req, res) => {
-  const { nome, email, senha } = req.body;
+  const { nome, email, senha } = req.body;  //requisição que o http/cliente trás pro meu servidor.
 
   if (!nome || !email || !senha)
-    return res.status(400).json({ error: "Campos obrigatórios" });
+    return res.status(400).json({ error: "Campos obrigatórios" });   //resposta que o meu servidor da para o cliente, caso o cliente não preencha os campos obrigatórios.
 
   if (!email.includes("@"))
     return res.status(400).json({ error: "Email inválido" });
@@ -19,21 +19,21 @@ exports.register = async (req, res) => {
   if (senha.length < 6)
     return res.status(400).json({ error: "Senha deve ter no mínimo 6 caracteres" });
 
-  const hash = await bcrypt.hash(senha, 10);
+  const hash = await bcrypt.hash(senha, 10);  //cria um hash da senha do usuário usando bcrypt, com um custo de 10. O hash é uma versão criptografada da senha que será armazenada no banco de dados, em vez da senha original, para aumentar a segurança.
 
   db.run(
     `INSERT INTO users (nome,email,password_hash) VALUES (?,?,?)`,
     [nome, email, hash],
     function (err) {
-      if (err) return res.status(400).json({ error: "Email já cadastrado" });
+      if (err) return res.status(400).json({ error: "Email já cadastrado" }); // se o usuario inserir um email que ja existe no register/banco vai da erro.
 
-      const token = jwt.sign(
-        { id: this.lastID, role: "cliente" },
-        JWT_SECRET,
+      const token = jwt.sign( //gera um token JWT para o usuário recém-registrado.
+        { id: this.lastID, role: "cliente" }, //dados que serão incluidos no tokem.
+        JWT_SECRET,  //carimbo secreto usado para assinar o token, garantindo que ele não possa ser alterado por terceiros.
         { expiresIn: "8h" }
       );
 
-      res.json({ token });
+      res.json({ token }); //entrega o token para o cliente, para que ele possa usar esse token para autenticar suas requisições futuras. O token contém informações sobre o usuário, como seu ID e função (role), e tem um tempo de expiração de 8 horas.
     }
   );
 };
@@ -56,13 +56,13 @@ exports.login = (req, res) => {
       return res.status(401).json({ error: "Senha incorreta" });
     }
 
-    const token = jwt.sign(
-      { id: user.id, role: user.role },
+    const token = jwt.sign(     //gera um token JWT para o usuário autenticado.
+      { id: user.id, role: user.role }, //dados que serão incluidos no tokem, nesse caso o id do usuário e a função (role) do usuário, que pode ser "cliente" ou "admin". Essas informações podem ser usadas posteriormente para autorizar o acesso a recursos específicos com base na função do usuário.
       JWT_SECRET,
       { expiresIn: "8h" }
     );
 
-    res.json({ 
+    res.json({  //resposta que o meu servidor da para o cliente, caso o login seja bem-sucedido.
     token, 
     role: user.role,
     user: {
