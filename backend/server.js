@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, "..")));
 
 
 // ===============================
-// Rotas da API
+// ENDEREÇO DAS ROTAS DE API
 // ===============================
 app.use("/auth", authRoutes);   //authroutes.js
 app.use("/pedidos", pedidosRoutes); //pedidosroutes.js
