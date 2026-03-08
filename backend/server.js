@@ -19,17 +19,17 @@ const corsOptions = {
     "http://localhost:5500",
     "http://127.0.0.1:5500"
   ],
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], //metodos que o sistema vai aceitar
+  allowedHeaders: ["Content-Type", "Authorization"]  // cabeçalhos permitidos, incluindo o Authorization para tokens JWT, permite que o usuario entre com o tokem jwt.
 };
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); // Permite que o front-end acesse a API sem problemas de CORS, garantindo que apenas os domínios especificados possam fazer requisições.
 
 
 // ===============================
 // Middlewares Globais
 // ===============================
-app.use(express.json());
+app.use(express.json()); // Permite que o Express entenda JSON no corpo das requisições
 
 // Servir arquivos do front (coloque seu front na pasta /public)
 app.use(express.static(path.join(__dirname, "..")));
@@ -52,7 +52,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({
     error: "Erro interno do servidor"
   });
-});
+});   // se der algum erro no servidor, ele cai aqui e mostra a mensagem de erro, evitando que o servidor quebre.
 
 
 // ===============================
