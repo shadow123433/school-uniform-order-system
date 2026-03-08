@@ -12,11 +12,28 @@ function auth(req, res, next) {   // porteiro que identifica o cliente, verifica
 
   const token = header.split(" ")[1]; // serve pra apagar o texto e ficar somente com o codigo que o servidor da para o cliente, ou seja, o token JWT. O token é a parte que vem depois de "Bearer " no cabeçalho de autorização.
 
+ // Primeiro, precisamos importar o DB no topo do arquivo se ainda não estiver:
+  // const db = require("../database/db"); 
+
   try {
-    req.user = jwt.verify(token, JWT_SECRET); //verifica se o token JWT fornecido pelo cliente é válido usando a chave secreta JWT_SECRET. Se o token for válido, ele decodifica o token e adiciona as informações do usuário (como id e role) à requisição (req.user) para que as rotas possam usar essas informações para autorizar o acesso. Se o token for inválido ou expirado, ele retorna uma resposta de erro com status 401 e uma mensagem indicando que o token é inválido ou expirado.
-    next();
-  } catch {
-    return res.status(401).json({ error: "Token inválido ou expirado" }); // depois que passar do tempo de atividade do token, ele vai expirar, e o cliente vai precisar fazer login novamente para obter um novo token. Isso é uma medida de segurança para garantir que os tokens não sejam usados indefinidamente, reduzindo o risco de uso indevido caso um token seja comprometido.
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    // CONSULTA AO BANCO: Verifica se o usuário do token ainda existe
+    const db = require("../database/db"); // Import direto caso não esteja no topo
+    
+    db.get("SELECT id, role FROM users WHERE id = ?", [decoded.id], (err, user) => {
+      if (err || !user) {
+        // Se deu erro ou o usuário não existe mais no banco... tchau!
+        return res.status(401).json({ error: "Conta inexistente ou excluída" });
+      }
+
+      // Se chegou aqui, o usuário existe. Passamos os dados reais do banco para o req.user
+      req.user = user; 
+      next();
+    });
+
+  } catch (err) {
+    return res.status(401).json({ error: "Token inválido ou expirado" });
   }
 }
 

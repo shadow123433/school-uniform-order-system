@@ -61,34 +61,30 @@ if (loginForm) {
             });
 
             const data = await res.json();
-               if (!res.ok) {
-                // Limpa o erro de ambos antes de decidir qual marcar
+
+            if (!res.ok) {
                 emailInput.classList.remove('input-error');
                 senhaInput.classList.remove('input-error');
 
+                // Se o status for 401 e a mensagem indicar que a conta sumiu, desloga na hora
+                if (res.status === 401 && data.error && data.error.includes("inexistente")) {
+                    abrirModal("Sua conta não foi encontrada. Você será desconectado.", () => {
+                        logout(); 
+                    });
+                    return;
+                }
+
                 if (res.status === 404) {
-                    // ERRO SÓ NO EMAIL: E-mail não cadastrado
                     emailInput.classList.add('input-error');
-                    // O campo de senha permanece normal (azul no foco)
                 } else if (res.status === 401) {
-                    // ERRO SÓ NA SENHA: E-mail existe, mas a senha está incorreta
                     senhaInput.classList.add('input-error');
-                    // O campo de e-mail permanece normal/azul
                 } else {
-                    // Outros erros: Marca o e-mail por padrão
                     emailInput.classList.add('input-error');
                 }
 
-                const mensagemServidor = data.message || data.error || data.msg;
-                let mensagemFinal = mensagemServidor;
-
-                if (!mensagemServidor) {
-                    if (res.status === 404) mensagemFinal = "Este e-mail não está cadastrado.";
-                    else if (res.status === 401) mensagemFinal = "Senha incorreta.";
-                    else mensagemFinal = "Erro ao realizar login.";
-                }
-
+                const mensagemFinal = data.error || data.message || "Erro ao realizar login.";
                 abrirModal(mensagemFinal);
+                console.error(`[${res.status}] Erro no login:`, data.error);
                 return;
             }
 
@@ -139,13 +135,18 @@ if (registerForm) {
         emailInput.classList.remove('input-error');
         senhaInput.classList.remove('input-error');
 
-        const nomeValor = nomeInput.value.trim();
+       const nomeValor = nomeInput.value.trim();
+        const senhaValor = senhaInput.value.trim();
         const regexNomeReal = /^[A-Za-zÀ-ÖØ-öø-ÿ]{2,}(?:\s+[A-Za-zÀ-ÖØ-öø-ÿ]{2,})+$/;
+        const possuiTresNumeros = (senhaValor.match(/\d/g) || []).length >= 3;
 
+        // Avisos no console para sabermos que o Front detectou, mas vai deixar o HTTP 400 acontecer
         if (!regexNomeReal.test(nomeValor)) {
-            nomeInput.classList.add('input-error');
-            abrirModal("Por favor, digite seu nome completo (Nome e Sobrenome).");
-            return;
+            console.warn("Validação local: Nome incompleto, enviando para gerar erro 400.");
+        }
+
+        if (senhaValor.length < 6 || !possuiTresNumeros) {
+            console.warn("Validação local: Senha fraca, enviando para gerar erro 400.");
         }
 
         try {
@@ -159,15 +160,30 @@ if (registerForm) {
                 })
             });
 
-            const data = await res.json();
-
-            if (!res.ok) {
+           const data = await res.json();
+                
+                if (!res.ok) {
                 const erroMsg = data.error ? data.error.toLowerCase() : "";
-                if (res.status === 409 || erroMsg.includes("email")) emailInput.classList.add('input-error');
-                if (erroMsg.includes("nome")) nomeInput.classList.add('input-error');
-                if (erroMsg.includes("senha")) senhaInput.classList.add('input-error');
+
+                // Marca o campo de e-mail se o erro for duplicata (409) ou domínio inválido
+                if (res.status === 409 || erroMsg.includes("email") || erroMsg.includes("gmail")) {
+                    emailInput.classList.add('input-error');
+                }
+                
+                // Marca o campo de nome se o erro vier do backend (400) ou contiver "nome"
+                if (res.status === 400 && erroMsg.includes("nome")) {
+                    nomeInput.classList.add('input-error');
+                }
+                
+                if (erroMsg.includes("senha")) {
+                    senhaInput.classList.add('input-error');
+                }
+
+                // Exibe a mensagem exata definida no backend (ex: "Digite seu nome completo")
                 abrirModal(data.error || "Erro ao cadastrar.");
-                return;  //permite os campos ficarem vermelho se caso um estiver errado.
+                console.error(`[${res.status}] Erro no cadastro:`, data.error);
+                
+                return;
             }
 
             // SUCESSO

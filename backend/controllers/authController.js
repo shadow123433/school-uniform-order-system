@@ -8,16 +8,30 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // REGISTER
 // ===============================
 exports.register = async (req, res) => {
-  const { nome, email, senha } = req.body;  //requisição que o http/cliente trás pro meu servidor.
+  const { nome, email, senha } = req.body;
 
-  if (!nome || !email || !senha)
-    return res.status(400).json({ error: "Campos obrigatórios" });   //resposta que o meu servidor da para o cliente, caso o cliente não preencha os campos obrigatórios.
+  // 1. Verifica se os campos estão vazios
+  if (!nome || !email || !senha) {
+    return res.status(400).json({ error: "Campos obrigatórios" });
+  }
 
-  if (!email.includes("@"))
-    return res.status(400).json({ error: "Email inválido" });
+  // 2. Validação de Nome Real (Nome e Sobrenome)
+  const regexNomeReal = /^[A-Za-zÀ-ÖØ-öø-ÿ]{2,}(?:\s+[A-Za-zÀ-ÖØ-öø-ÿ]{2,})+$/;
+  if (!regexNomeReal.test(nome.trim())) {
+    return res.status(400).json({ error: "Digite seu nome completo (Nome e Sobrenome)" });
+  }
 
-  if (senha.length < 6)
-    return res.status(400).json({ error: "Senha deve ter no mínimo 6 caracteres" });
+  // 3. Validação rigorosa do Gmail
+  if (!email.toLowerCase().endsWith("@gmail.com")) {
+    return res.status(400).json({ error: "Apenas contas @gmail.com são permitidas" });
+  }
+
+ // Validação: Mínimo 6 caracteres E pelo menos 3 números
+  const possuiTresNumeros = (senha.match(/\d/g) || []).length >= 3;
+
+  if (senha.length < 6 || !possuiTresNumeros) {
+    return res.status(400).json({ error: "A senha deve ter no mínimo 6 caracteres e conter pelo menos 3 números." });
+  }
 
   const hash = await bcrypt.hash(senha, 10);  //cria um hash da senha do usuário usando bcrypt, com um custo de 10. O hash é uma versão criptografada da senha que será armazenada no banco de dados, em vez da senha original, para aumentar a segurança.
 
