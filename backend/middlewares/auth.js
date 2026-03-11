@@ -15,7 +15,7 @@ function auth(req, res, next) {   // porteiro que identifica o cliente, verifica
 
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);  //verifica se o tokem e valido e se for valido ele vai retornar os dados que estão dentro dele.
     
     
     db.get("SELECT id, role FROM users WHERE id = ?", [decoded.id], (err, user) => {

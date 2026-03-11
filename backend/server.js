@@ -8,7 +8,7 @@ const pedidosRoutes = require("./routes/pedidosroutes");
 
 require("./database/db"); // Inicializa o banco ao subir o servidor
 
-const app = express();
+const app = express(); //coração do server, sem isso a framework nao funciona.
 
 
 // ===============================
@@ -19,7 +19,7 @@ const corsOptions = {
     "http://localhost:5500",
     "http://127.0.0.1:5500"
   ],
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], //metodos que o sistema vai aceitar
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], //metodos que o sistema vai aceitar.
   allowedHeaders: ["Content-Type", "Authorization"]  // cabeçalhos permitidos, incluindo o Authorization para tokens JWT, permite que o usuario entre com o tokem jwt.
 };
 

@@ -1,8 +1,8 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router();  //ferramenta criada pra organizar rotas de api.
 
-const authController = require("../controllers/authController");
-const { auth } = require("../middlewares/auth");
+const authController = require("../controllers/authController"); //aqui vai a logica dessas rotas que estao declaradas abaixo.
+const { auth } = require("../middlewares/auth"); //antes do cliente passar pelas rotas ele cai em um processo de verificação de tokem.
 
 // Rotas
 router.post("/register", authController.register);

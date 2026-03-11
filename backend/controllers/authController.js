@@ -1,4 +1,4 @@
-const db = require("../database/db");
+const db = require("../database/db"); //importando banco de dados juntamente com o arquivo db.js
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
