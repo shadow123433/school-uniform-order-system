@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const env = require("../config/env");
+const db = require("../database/db"); 
 
 const JWT_SECRET = env.JWT_SECRET;
 
@@ -12,14 +13,10 @@ function auth(req, res, next) {   // porteiro que identifica o cliente, verifica
 
   const token = header.split(" ")[1]; // serve pra apagar o texto e ficar somente com o codigo que o servidor da para o cliente, ou seja, o token JWT. O token é a parte que vem depois de "Bearer " no cabeçalho de autorização.
 
- // Primeiro, precisamos importar o DB no topo do arquivo se ainda não estiver:
-  // const db = require("../database/db"); 
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     
-    // CONSULTA AO BANCO: Verifica se o usuário do token ainda existe
-    const db = require("../database/db"); // Import direto caso não esteja no topo
     
     db.get("SELECT id, role FROM users WHERE id = ?", [decoded.id], (err, user) => {
       if (err || !user) {
