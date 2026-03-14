@@ -84,7 +84,7 @@ JWT_SECRET=sua_chave_secreta
 ## Iniciar o servidor
 
 ```bash
-node server
+node server.js
 ```
 
 ---
