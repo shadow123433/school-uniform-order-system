@@ -17,7 +17,8 @@ const app = express(); //coração do server, sem isso a framework nao funciona.
 const corsOptions = {
   origin: [
     "http://localhost:5500",
-    "http://127.0.0.1:5500"
+    "http://127.0.0.1:5500",
+    "https://school-uniform-order-system.onrender.com" // minha url da render
   ],
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], //metodos que o sistema vai aceitar.
   allowedHeaders: ["Content-Type", "Authorization"]  // cabeçalhos permitidos, incluindo o Authorization para tokens JWT, permite que o usuario entre com o tokem jwt.
@@ -58,6 +59,9 @@ app.use((err, req, res, next) => {
 // ===============================
 // Inicialização do servidor
 // ===============================
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+// A Render define a porta automaticamente, se não houver, usa 10000
+const runningPort = process.env.PORT || PORT || 10000;
+
+app.listen(runningPort, "0.0.0.0", () => {
+  console.log(`Servidor rodando na porta ${runningPort}`);
 });

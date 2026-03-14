@@ -1,9 +1,12 @@
 const sqlite3 = require("sqlite3").verbose();
 const bcrypt = require("bcrypt");
 const env = require("../config/env");
+const path = require("path"); 
+
+const dbPath = path.join(__dirname, "..", "pedidos.db");
 
 const db = new sqlite3.Database(
-  __dirname + "/../pedidos.db",
+  dbPath,
   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE
 );
 

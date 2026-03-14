@@ -1,3 +1,7 @@
+const URL_ADMIN = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://localhost:3000" 
+    : "";
+
 // Elementos do DOM
 const loginBox = document.getElementById("loginBox");
 const painel = document.getElementById("painel");
@@ -20,7 +24,7 @@ async function carregarPedidos(){
   if(!token) return;
 
   try {
-    const res = await fetch(API + "/pedidos",{
+    const res = await fetch(URL_ADMIN + "/pedidos",{
       headers:{ "Authorization":"Bearer " + token }
     });
 
@@ -107,7 +111,7 @@ function fecharModal() {
 async function alterarStatus(id, status){
     const token = getToken();
     try {
-        await fetch(`${API}/pedidos/${id}/status`, {
+        await fetch(`${URL_ADMIN}/pedidos/${id}/status`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
             body: JSON.stringify({ status })
@@ -126,7 +130,7 @@ function deletarPedido(id) {
     btn.onclick = async () => {
         const token = getToken();
         try {
-            const res = await fetch(`${API}/pedidos/${id}`, {
+            const res = await fetch(`${URL_ADMIN}/pedidos/${id}`, {
                 method: "DELETE",
                 headers: { "Authorization": "Bearer " + token }
             });
