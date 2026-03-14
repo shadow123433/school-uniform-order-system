@@ -42,7 +42,7 @@ Aplicação web **Full Stack** desenvolvida para gerenciamento de pedidos, com a
 Clone o repositório:
 
 ```bash
-git clone https://github.com/shadow123433/0010.git
+git clone https://github.com/shadow123433/school-uniform-order-system.git
 ```
 
 Entre na pasta do projeto:
