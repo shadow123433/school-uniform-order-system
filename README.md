@@ -49,6 +49,7 @@ Entre na pasta do projeto:
 
 ```bash
 cd school-uniform-order-system
+code .
 ```
 
 Entre na pasta backend:
