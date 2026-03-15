@@ -55,37 +55,42 @@ exports.register = async (req, res) => {
 };
 
 // ===============================
-// LOGIN
+// LOGIN (VERSÃO DEFINITIVA)
 // ===============================
 exports.login = (req, res) => {
   const { email, senha } = req.body;
 
   db.get("SELECT * FROM users WHERE email=?", [email], async (err, user) => {
-    // 1. Se o usuário não existe, retorna 404
+    // 1. Verifica se o usuário existe
     if (!user) {
       return res.status(404).json({ error: "Este e-mail não está cadastrado" });
     }
 
-    // 2. Se o usuário existe, mas a senha está errada, retorna 401
+    // 2. Verifica a senha
     const ok = await bcrypt.compare(senha, user.password_hash);
     if (!ok) {
       return res.status(401).json({ error: "Senha incorreta" });
     }
 
-    const token = jwt.sign(     //gera um token JWT para o usuário autenticado.
-      { id: user.id, role: user.role }, //dados que serão incluidos no tokem, nesse caso o id do usuário e a função (role) do usuário, que pode ser "cliente" ou "admin". Essas informações podem ser usadas posteriormente para autorizar o acesso a recursos específicos com base na função do usuário.
+    // 3. A SOLUÇÃO CERTEIRA:
+    // Compara o email do login com o ADMIN_EMAIL que está na Render (admin@gmail.com)
+    const adminEmailConfig = process.env.ADMIN_EMAIL;
+    const userRole = (email.toLowerCase() === adminEmailConfig?.toLowerCase()) ? "admin" : user.role;
+
+    const token = jwt.sign(
+      { id: user.id, role: userRole }, 
       JWT_SECRET,
       { expiresIn: "8h" }
     );
 
-    res.json({  //resposta que o meu servidor da para o cliente, caso o login seja bem-sucedido.
-    token, 
-    role: user.role,
-    user: {
-        nome: user.nome, // Enviando o nome que está no banco de dados
-        email: user.email
-    }
-});
+    res.json({
+      token, 
+      role: userRole,
+      user: {
+          nome: user.nome,
+          email: user.email
+      }
+    });
   });
 };
 
