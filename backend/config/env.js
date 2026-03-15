@@ -13,7 +13,8 @@ if (fs.existsSync(envPath)) {
 }
 
 module.exports = {
-  JWT_SECRET: process.env.JWT_SECRET || "chave_mestra_local",
+  // Forçamos a mesma string que você colocou no painel da Render
+  JWT_SECRET: process.env.JWT_SECRET || "uma_frase_bem_longa_e_aleatoria_123",
   ADMIN_EMAIL: process.env.ADMIN_EMAIL,
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
   PORT: process.env.PORT || 10000
