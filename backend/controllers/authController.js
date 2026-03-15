@@ -59,39 +59,28 @@ exports.register = async (req, res) => {
 // ===============================
 exports.login = (req, res) => {
   const { email, senha } = req.body;
+  // Importamos as configs aqui dentro para garantir que peguem os valores da Render
+  const config = require("../config/env"); 
 
   db.get("SELECT * FROM users WHERE email=?", [email], async (err, user) => {
-    // 1. Verifica se o usuário existe
-    if (!user) {
-      return res.status(404).json({ error: "Este e-mail não está cadastrado" });
-    }
+    if (!user) return res.status(404).json({ error: "Este e-mail não está cadastrado" });
 
-    // 2. Verifica a senha
     const ok = await bcrypt.compare(senha, user.password_hash);
-    if (!ok) {
-      return res.status(401).json({ error: "Senha incorreta" });
-    }
+    if (!ok) return res.status(401).json({ error: "Senha incorreta" });
 
-    // 3. A SOLUÇÃO DEFINITIVA:
-    // Usamos o JWT_SECRET e o ADMIN_EMAIL que vem do seu arquivo de configuração (env.js)
-    const { JWT_SECRET, ADMIN_EMAIL } = require("../config/env");
-
-    // Compara o email digitado com o email definido na Render
-    const userRole = (email.toLowerCase() === ADMIN_EMAIL?.toLowerCase()) ? "admin" : user.role;
+    // Compara com o email da Render. Se bater, é ADMIN.
+    const userRole = (email.toLowerCase() === config.ADMIN_EMAIL?.toLowerCase()) ? "admin" : user.role;
 
     const token = jwt.sign(
       { id: user.id, role: userRole }, 
-      JWT_SECRET,
+      config.JWT_SECRET, // Usa o segredo vindo do env.js
       { expiresIn: "8h" }
     );
 
     res.json({
       token, 
       role: userRole,
-      user: {
-          nome: user.nome,
-          email: user.email
-      }
+      user: { nome: user.nome, email: user.email }
     });
   });
 };

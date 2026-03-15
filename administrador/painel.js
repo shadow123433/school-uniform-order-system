@@ -1,12 +1,12 @@
 const URL_ADMIN = (
   window.location.hostname === "localhost" || 
-  window.location.hostname === "127.0.0.1" || 
-  window.location.protocol === "file:"
+  window.location.hostname === "127.0.0.1"
 ) 
 ? "http://localhost:3000" 
 : "https://school-uniform-order-system.onrender.com";
 
-console.log("Painel ADM conectando em:", URL_ADMIN);
+// Garante que o console nos diga onde estamos conectando
+console.log("Painel conectando em:", URL_ADMIN);
 
 // Elementos do DOM
 const loginBox = document.getElementById("loginBox");
