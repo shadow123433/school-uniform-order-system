@@ -35,9 +35,7 @@ async function carregarPedidos(){
     });
 
     if (res.status === 401 || res.status === 403) {
-      console.error("Acesso negado pelo servidor. Verifique o console para detalhes.");
-      // logout(); // Comentado para você não ser expulso enquanto debugamos
-      alert("Erro de permissão: O servidor não te reconhece como Admin.");
+      logout();
       return;
     }
 
@@ -128,40 +126,72 @@ async function alterarStatus(id, status){
     } catch (err) { abrirModal("Erro ao atualizar status."); }
 }
 
-function deletarPedido(id) {
-    abrirModal("Excluir pedido permanentemente?");
-    const btn = document.getElementById("btnFecharModalAviso");
-    btn.innerText = "Sim, Excluir";
-    btn.style.background = "#dc3545";
-    btn.style.color = "#fff";
+async function deletarPedido(id) {
+    // 1. Configura e abre o modal para confirmação
+    const btnAcao = document.getElementById("btnConfirmarAcao");
+    const msg = document.getElementById("modalMessage");
+    
+    msg.innerText = "Tem certeza que deseja excluir este pedido permanentemente?";
+    
+    // Configura o botão de exclusão
+    btnAcao.innerText = "Sim, Excluir";
+    btnAcao.style.background = "#dc3545"; 
+    btnAcao.style.color = "#fff";
+    btnAcao.style.display = "inline-block";
+    btnAcao.disabled = false; // Garante que comece habilitado
 
-    btn.onclick = async () => {
+    // Abre o modal (exibe o overlay)
+    document.getElementById("modalOverlay").style.display = "flex";
+
+    // 2. Define o clique de exclusão
+    btnAcao.onclick = async () => {
         const token = getToken();
+        btnAcao.disabled = true; // Evita cliques repetidos
+        btnAcao.innerText = "Excluindo...";
+
         try {
             const res = await fetch(`${URL_ADMIN}/pedidos/${id}`, {
                 method: "DELETE",
                 headers: { "Authorization": "Bearer " + token }
             });
-            if (res.ok) { fecharModal(); carregarPedidos(); }
-        } catch (err) { abrirModal("Erro de conexão."); }
+
+            if (res.ok) { 
+                fecharModal(); 
+                carregarPedidos(); 
+            } else {
+                // Em caso de erro do servidor, altera o modal ATUAL em vez de abrir outro
+                exibirErroNoModal("Erro ao excluir o pedido no servidor.");
+            }
+        } catch (err) { 
+            console.error(err);
+            // Em caso de conexão, altera o modal ATUAL
+            exibirErroNoModal("Erro de conexão. Tente novamente.");
+        }
     };
+}
+
+// Função auxiliar para transformar o modal de confirmação em um modal de erro
+function exibirErroNoModal(mensagem) {
+    const msg = document.getElementById("modalMessage");
+    const btnAcao = document.getElementById("btnConfirmarAcao");
+    
+    msg.innerText = mensagem;
+    msg.style.color = "#b91c1c"; // Texto em vermelho para destaque
+    
+    // Transforma o botão de excluir em um botão de "Entendi" que apenas fecha
+    btnAcao.innerText = "Entendi";
+    btnAcao.style.background = "#6b7280"; // Cinza
+    btnAcao.disabled = false;
+    btnAcao.onclick = fecharModal; 
+}
+
+function fecharModal() {
+    document.getElementById("modalOverlay").style.display = "none";
+    // Resetar a cor da mensagem para o padrão quando fechar
+    document.getElementById("modalMessage").style.color = "#4b5563";
 }
 
 // AUTO LOGIN
 if(getToken()){
   iniciarPainel();
-}
-
-
-// Função para pegar o token salvo no navegador
-function getToken() {
-    return localStorage.getItem("token");
-}
-
-// Função para deslogar caso o token seja inválido ou expire
-function logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    alert("Sua sessão expirou ou você não tem permissão.");
-    window.location.href = "../login.html"; // Ajuste o caminho para sua página de login
 }
