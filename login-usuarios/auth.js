@@ -1,7 +1,8 @@
+// Substitua as primeiras linhas por isso:
 const API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
     ? "http://localhost:3000"
-    : ""; // Vazio significa que ele usará o próprio domínio da Render
-
+    : "https://school-uniform-order-system.onrender.com"; // Coloque sua URL real aqui
+    
 // =====================
 // UTILITÁRIOS (TOKEN)
 // =====================
