@@ -22,7 +22,6 @@ function auth(req, res, next) {
       role: decoded.role
     };
 
-    console.log(`✅ ACESSO LIBERADO: Usuário ID ${decoded.id} autenticado via JWT.`);
     next(); 
 
   } catch (err) {
