@@ -149,3 +149,17 @@ function deletarPedido(id) {
 if(getToken()){
   iniciarPainel();
 }
+
+
+// Função para pegar o token salvo no navegador
+function getToken() {
+    return localStorage.getItem("token");
+}
+
+// Função para deslogar caso o token seja inválido ou expire
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    alert("Sua sessão expirou ou você não tem permissão.");
+    window.location.href = "../login.html"; // Ajuste o caminho para sua página de login
+}
