@@ -55,7 +55,7 @@ exports.register = async (req, res) => {
 };
 
 // ===============================
-// LOGIN (VERSÃO DEFINITIVA)
+// LOGIN (VERSÃO FINAL CONECTADA COM ENV.JS)
 // ===============================
 exports.login = (req, res) => {
   const { email, senha } = req.body;
@@ -72,10 +72,12 @@ exports.login = (req, res) => {
       return res.status(401).json({ error: "Senha incorreta" });
     }
 
-    // 3. A SOLUÇÃO CERTEIRA:
-    // Compara o email do login com o ADMIN_EMAIL que está na Render (admin@gmail.com)
-    const adminEmailConfig = process.env.ADMIN_EMAIL;
-    const userRole = (email.toLowerCase() === adminEmailConfig?.toLowerCase()) ? "admin" : user.role;
+    // 3. A SOLUÇÃO DEFINITIVA:
+    // Usamos o JWT_SECRET e o ADMIN_EMAIL que vem do seu arquivo de configuração (env.js)
+    const { JWT_SECRET, ADMIN_EMAIL } = require("../config/env");
+
+    // Compara o email digitado com o email definido na Render
+    const userRole = (email.toLowerCase() === ADMIN_EMAIL?.toLowerCase()) ? "admin" : user.role;
 
     const token = jwt.sign(
       { id: user.id, role: userRole }, 
