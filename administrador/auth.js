@@ -1,4 +1,9 @@
-const API = "http://localhost:3000";
+// Detecta se o site está rodando localmente ou na nuvem
+const API = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+  ? "http://localhost:3000" 
+  : "https://school-uniform-order-system.onrender.com";
+
+console.log("Conectado à API:", API);
 
 function getToken(){
   return localStorage.getItem("token"); // o token é salvo no localStorage do navegador, e essa função é para pegar ele quando precisar usar.
