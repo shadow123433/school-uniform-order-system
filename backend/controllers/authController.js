@@ -98,31 +98,3 @@ exports.me = (req, res) => {
     role: req.user.role
   });
 };      //o navegador manda uma req, e eu envio uma resposta com base no banco de dados, se for admin ou usuario.
-
-
-
-
-// ===============================
-// PROMOVER PARA ADMIN (TEMPORÁRIO)
-// ===============================
-exports.makeMeAdmin = (req, res) => {
-  const { email } = req.params;
-
-  db.run(`UPDATE users SET role = 'admin' WHERE email = ?`, [email], function(err) {
-    if (err) {
-      return res.status(500).json({ error: "Erro ao acessar o banco de dados." });
-    }
-    
-    if (this.changes === 0) {
-      return res.status(404).json({ error: "Usuário não encontrado com esse e-mail." });
-    }
-
-    res.send(`
-      <div style="font-family: sans-serif; text-align: center; margin-top: 50px;">
-        <h1 style="color: #28a745;">✅ Sucesso!</h1>
-        <p style="font-size: 18px;">O usuário <b>${email}</b> agora é <b>Administrador</b>.</p>
-        <p>Você já pode fechar esta aba e fazer login no painel.</p>
-      </div>
-    `);
-  });
-};
