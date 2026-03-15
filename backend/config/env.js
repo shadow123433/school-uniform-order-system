@@ -13,8 +13,8 @@ if (fs.existsSync(envPath)) {
 }
 
 module.exports = {
-  // Forçamos a mesma string que você colocou no painel da Render
-  JWT_SECRET: process.env.JWT_SECRET || "uma_frase_bem_longa_e_aleatoria_123",
+  // REMOVEMOS a frase reserva. Agora ele É OBRIGADO a usar o que está na Render ou no .env
+  JWT_SECRET: process.env.JWT_SECRET, 
   ADMIN_EMAIL: process.env.ADMIN_EMAIL,
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
   PORT: process.env.PORT || 10000
