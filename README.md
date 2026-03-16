@@ -2,7 +2,10 @@
 
 Aplicação web **Full Stack** desenvolvida para gerenciamento de pedidos, com autenticação de usuários e integração entre frontend, backend e banco de dados.
 https://school-uniform-order-system.onrender.com
+---
 
+# Veja meu sistema no youtube
+https://youtu.be/pLW7idiveBc?si=7VDwWusn8BBbneeO
 ---
 
 ## Tecnologias utilizadas
