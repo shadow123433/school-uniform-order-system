@@ -79,11 +79,11 @@ exports.login = (req, res) => {
     );
 
     res.json({  //resposta que o meu servidor da para o cliente, caso o login seja bem-sucedido.
-    token, 
-    role: user.role,
+    token, //entrega o token JWT gerado para o cliente, que pode ser usado para autenticar requisições futuras.
+    role: user.role, //verifica se e adm ou cliente
     user: {
         nome: user.nome, // Enviando o nome que está no banco de dados
-        email: user.email
+        email: user.email //caso exista dois nomes iguais no banco de dados, envia o email por precaução.
     }
 });
   });

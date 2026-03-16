@@ -1,5 +1,5 @@
-const path = require("path");
-const fs = require("fs");
+const path = require("path"); //lida com caminhos de arquivos e pastas de forma segura e eficiente.
+const fs = require("fs"); //ferramenta que ler arquivos de texto coomo no meu caso o .env.
 
 // Caminho para o seu arquivo .env local
 const envPath = path.resolve(__dirname, "../../.env");
@@ -10,7 +10,7 @@ if (fs.existsSync(envPath)) {
 } else {
   // Na Render, apenas inicializa o dotenv padrão
   require("dotenv").config();
-}
+}  //essa parte serve pra o sistema se comunicar com as variaveis salvas na render.
 
 module.exports = {
   // REMOVEMOS a frase reserva. Agora ele É OBRIGADO a usar o que está na Render ou no .env
