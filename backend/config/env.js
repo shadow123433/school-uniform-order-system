@@ -13,7 +13,9 @@ if (fs.existsSync(envPath)) {
 }
 
 module.exports = {
-  JWT_SECRET: process.env.JWT_SECRET || "chave_seguranca_padrao_123", 
+  
+  JWT_SECRET: "QUALQUER_COISA_123_TESTE_FIXO", 
+  
   ADMIN_EMAIL: process.env.ADMIN_EMAIL,
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
   PORT: process.env.PORT || 10000
