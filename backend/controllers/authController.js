@@ -1,7 +1,10 @@
 const db = require("../database/db"); 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const config = require("../config/env"); // Importamos o objeto inteiro aqui
+
+// AQUI ESTÁ A CHAVE PARA O SUCESSO:
+const { JWT_SECRET } = require("../config/env");
+
 
 // ===============================
 // REGISTER
@@ -9,40 +12,44 @@ const config = require("../config/env"); // Importamos o objeto inteiro aqui
 exports.register = async (req, res) => {
   const { nome, email, senha } = req.body;
 
+  // 1. Verifica se os campos estão vazios
   if (!nome || !email || !senha) {
     return res.status(400).json({ error: "Campos obrigatórios" });
   }
 
+  // 2. Validação de Nome Real (Nome e Sobrenome)
   const regexNomeReal = /^[A-Za-zÀ-ÖØ-öø-ÿ]{2,}(?:\s+[A-Za-zÀ-ÖØ-öø-ÿ]{2,})+$/;
   if (!regexNomeReal.test(nome.trim())) {
     return res.status(400).json({ error: "Digite seu nome completo (Nome e Sobrenome)" });
   }
 
+  // 3. Validação rigorosa do Gmail
   if (!email.toLowerCase().endsWith("@gmail.com")) {
     return res.status(400).json({ error: "Apenas contas @gmail.com são permitidas" });
   }
 
+ // Validação: Mínimo 6 caracteres E pelo menos 3 números
   const possuiTresNumeros = (senha.match(/\d/g) || []).length >= 3;
+
   if (senha.length < 6 || !possuiTresNumeros) {
     return res.status(400).json({ error: "A senha deve ter no mínimo 6 caracteres e conter pelo menos 3 números." });
   }
 
-  const hash = await bcrypt.hash(senha, 10);
+  const hash = await bcrypt.hash(senha, 10);  //cria um hash da senha do usuário usando bcrypt, com um custo de 10. O hash é uma versão criptografada da senha que será armazenada no banco de dados, em vez da senha original, para aumentar a segurança.
 
   db.run(
     `INSERT INTO users (nome,email,password_hash) VALUES (?,?,?)`,
     [nome, email, hash],
     function (err) {
-      if (err) return res.status(400).json({ error: "Email já cadastrado" });
+      if (err) return res.status(400).json({ error: "Email já cadastrado" }); // se o usuario inserir um email que ja existe no register/banco vai da erro.
 
-      // AJUSTE AQUI: Usando config.JWT_SECRET para bater com o login e middleware
-      const token = jwt.sign(
-        { id: this.lastID, role: "cliente" }, 
-        config.JWT_SECRET, 
+      const token = jwt.sign( //gera um token JWT para o usuário recém-registrado.
+        { id: this.lastID, role: "cliente" }, //dados que serão incluidos no tokem.
+        JWT_SECRET,  //carimbo secreto usado para assinar o token, garantindo que ele não possa ser alterado por terceiros.
         { expiresIn: "8h" }
       );
 
-      res.json({ token });
+      res.json({ token }); //entrega o token para o cliente, para que ele possa usar esse token para autenticar suas requisições futuras. O token contém informações sobre o usuário, como seu ID e função (role), e tem um tempo de expiração de 8 horas.
     }
   );
 };
@@ -54,25 +61,31 @@ exports.login = (req, res) => {
   const { email, senha } = req.body;
 
   db.get("SELECT * FROM users WHERE email=?", [email], async (err, user) => {
-    if (!user) return res.status(404).json({ error: "Este e-mail não está cadastrado" });
+    // 1. Se o usuário não existe, retorna 404
+    if (!user) {
+      return res.status(404).json({ error: "Este e-mail não está cadastrado" });
+    }
 
+    // 2. Se o usuário existe, mas a senha está errada, retorna 401
     const ok = await bcrypt.compare(senha, user.password_hash);
-    if (!ok) return res.status(401).json({ error: "Senha incorreta" });
+    if (!ok) {
+      return res.status(401).json({ error: "Senha incorreta" });
+    }
 
-    const userRole = (email.toLowerCase() === config.ADMIN_EMAIL?.toLowerCase()) ? "admin" : user.role;
-
-    // AJUSTE AQUI: Garantindo o uso do config.JWT_SECRET
-    const token = jwt.sign(
-      { id: user.id, role: userRole }, 
-      config.JWT_SECRET, 
+    const token = jwt.sign(     //gera um token JWT para o usuário autenticado.
+      { id: user.id, role: user.role }, //dados que serão incluidos no tokem, nesse caso o id do usuário e a função (role) do usuário, que pode ser "cliente" ou "admin". Essas informações podem ser usadas posteriormente para autorizar o acesso a recursos específicos com base na função do usuário.
+      JWT_SECRET,
       { expiresIn: "8h" }
     );
 
-    res.json({
-      token, 
-      role: userRole,
-      user: { nome: user.nome, email: user.email }
-    });
+    res.json({  //resposta que o meu servidor da para o cliente, caso o login seja bem-sucedido.
+    token, 
+    role: user.role,
+    user: {
+        nome: user.nome, // Enviando o nome que está no banco de dados
+        email: user.email
+    }
+});
   });
 };
 
@@ -84,4 +97,4 @@ exports.me = (req, res) => {
     id: req.user.id,
     role: req.user.role
   });
-};
+};      //o navegador manda uma req, e eu envio uma resposta com base no banco de dados, se for admin ou usuario.
