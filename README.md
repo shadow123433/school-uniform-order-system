@@ -4,7 +4,7 @@ Aplicação web **Full Stack** desenvolvida para gerenciamento de pedidos, com a
 ---
 
 # Demonstração em video
-https://youtu.be/pLW7idiveBc?si=7VDwWusn8BBbneeO
+https://youtu.be/iNIpnMu_5Zk?si=uuhl_6VN3Qn-OfeT
 ---
 
 # Sistema online
