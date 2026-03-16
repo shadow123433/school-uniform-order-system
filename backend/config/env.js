@@ -13,8 +13,7 @@ if (fs.existsSync(envPath)) {
 }
 
 module.exports = {
-  // REMOVEMOS a frase reserva. Agora ele É OBRIGADO a usar o que está na Render ou no .env
-  JWT_SECRET: process.env.JWT_SECRET, 
+  JWT_SECRET: process.env.JWT_SECRET || "chave_seguranca_padrao_123", 
   ADMIN_EMAIL: process.env.ADMIN_EMAIL,
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
   PORT: process.env.PORT || 10000

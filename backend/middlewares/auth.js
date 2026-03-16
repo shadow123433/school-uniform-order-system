@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const config = require("../config/env"); // Importa o objeto inteiro
+// Importamos o objeto 'config' inteiro para acessar a propriedade dinamicamente
+const config = require("../config/env");
 
 function auth(req, res, next) {
   const header = req.headers.authorization;
@@ -11,7 +12,8 @@ function auth(req, res, next) {
   const token = header.split(" ")[1];
 
   try {
-    // BUSCAMOS A CHAVE DO OBJETO CONFIG NO MOMENTO DA VERIFICAÇÃO
+    // AQUI ESTÁ O SEGREDO: 
+    // Usamos config.JWT_SECRET aqui dentro para garantir que ele leia o valor da Render na hora da requisição.
     const decoded = jwt.verify(token, config.JWT_SECRET);
     
     req.user = {
@@ -22,7 +24,8 @@ function auth(req, res, next) {
     next(); 
 
   } catch (err) {
-    console.error("❌ ERRO NA VERIFICAÇÃO NA RENDER:", err.message);
+    // Este log vai te mostrar na Render o motivo exato se falhar
+    console.error("❌ ERRO NA VERIFICAÇÃO:", err.message);
     return res.status(401).json({ error: "Sessão expirada ou token inválido." });
   }
 }
