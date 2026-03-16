@@ -71,30 +71,116 @@ hr {
 /* Estiliza a seção com a foto e o texto */
 .secao {
   display: flex;
-  align-items: center; /* centraliza verticalmente */
-  justify-content: center; /* centraliza horizontalmente */
-  gap: 40px; /* distância entre a foto e o texto */
-  padding: 40px 0; /* espaçamento superior e inferior */
+  align-items: center; 
+  justify-content: center; 
+  gap: 40px; 
+  padding: 40px 0;
+  width: 100%; /* Garante que a seção use o espaço todo */
 }
 
-/* Controla o tamanho da foto */
-.secao img {
+/* Força os lados a terem o mesmo comportamento */
+.lado-esquerdo, .lado-direito {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  max-width: 400px; /* controla o tamanho máximo */
-  height: auto; /* mantém proporção */
-  border-radius: 10px;
 }
 
-
-
-
-/* cada lado tem 50 de largura*/
-.lado-direito {
-  flex: 1;
+/* Container da imagem - UNIFICADO */
+.objetivo-img {
+  position: relative;
+  width: 100%;
+  max-width: 500px; 
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  background: transparent;
+  display: block;
 }
 
-.lado-esquerdo {
-  flex: 1;
+/* Ajusta a imagem para ser clara, completa e sem distorção */
+.secao img, .objetivo-img img {
+  width: 100%;
+  height: auto;      /* Mantém a proporção original */
+  object-fit: cover; /* Garante que preencha o espaço sem esticar */
+  display: block;
+  filter: none !important;
+  border-radius: 12px;
+}
+
+/* Remove película escura */
+.objetivo-img::before, .titulo-bg::before {
+  display: none !important;
+}
+
+/* Texto sobre a imagem */
+.objetivo-texto {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 26px;
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.9);
+}
+
+/* --- AJUSTE PARA CELULAR (RESTAURAÇÃO TOTAL DO EIXO CENTRAL) --- */
+@media (max-width: 768px) {
+  
+  /* Força o container pai a alinhar tudo no meio */
+  .container {
+    padding: 15px !important;
+    text-align: center !important;
+  }
+
+  /* Faz a seção virar uma pilha vertical perfeita */
+  .secao {
+    display: block !important; /* Muda de flex para block para evitar desvios */
+    text-align: center !important;
+    padding: 20px 0 !important;
+    width: 100% !important;
+  }
+
+  /* Remove o comportamento de colunas que "puxam" para o lado */
+  .lado-esquerdo, .lado-direito {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    text-align: center !important;
+  }
+
+  /* Centraliza a imagem e o container dela (com tamanho menor) */
+  .objetivo-img, .secao img {
+    display: block !important;
+    margin: 0 auto 20px auto !important; /* Centraliza e dá mais espaço embaixo */
+    max-width: 90% !important; /* <--- AJUSTE AQUI PARA O TAMANHO QUE QUISER (ex: 70%) */
+    width: auto !important;
+    border-radius: 12px;
+    height: auto !important; /* Mantém a proporção correta */
+  }
+
+  /* Centraliza o texto embaixo da imagem */
+  .secao p {
+    display: block !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    width: 90% !important;
+    max-width: 400px !important;
+    float: none !important; /* Remove qualquer float que possa existir */
+  }
+
+  /* Ajusta o texto que fica dentro da imagem */
+  .objetivo-texto {
+    width: 100% !important;
+    left: 0 !important;
+    justify-content: center !important;
+  }
 }
 
 
