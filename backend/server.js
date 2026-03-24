@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-// Puxamos PORT e JWT_SECRET já configurados pela "inteligência" do env.js
 const { PORT, JWT_SECRET } = require("./config/env"); 
 
 const authRoutes = require("./routes/authroutes");
