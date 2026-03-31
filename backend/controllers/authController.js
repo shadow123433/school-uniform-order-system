@@ -2,7 +2,7 @@ const db = require("../database/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// AQUI ESTÁ A CHAVE PARA O SUCESSO:
+
 const { JWT_SECRET } = require("../config/env");
 
 
