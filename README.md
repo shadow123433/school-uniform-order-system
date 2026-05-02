@@ -16,6 +16,8 @@ https://school-uniform-order-system.onrender.com
 - JavaScript
 - Node.js
 - Express
+- Token JWT
+- Bcrypt 
 - HTML
 - CSS
 - Banco de dados SQL
