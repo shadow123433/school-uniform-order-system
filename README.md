@@ -100,4 +100,4 @@ node server.js
 
 ## Objetivo do projeto
 
-Este projeto foi desenvolvido com o objetivo de praticar o desenvolvimento de aplicações web completas, envolvendo frontend, backend, API REST e banco de dados.
+Desenvolver uma solução web para gerenciamento eficiente de pedidos de uniformes escolares, automatizando o controle de usuários, produtos e fluxo de pedidos.
