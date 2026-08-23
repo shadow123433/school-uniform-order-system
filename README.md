@@ -101,3 +101,10 @@ node server.js
 ## Objetivo do projeto
 
 Desenvolver uma solução web para gerenciamento eficiente de pedidos de uniformes escolares, automatizando o controle de usuários, produtos e fluxo de pedidos.
+
+
+## 👨‍💻 Autor
+
+Thiago Martins  
+
+---
